@@ -53,9 +53,7 @@ const SmartFishChecker: React.FC = () => {
   };
 
   return (
-    // Removed absolute positioning constraints and using relative for internal flow
-    // overflow-hidden is kept for border-radius but the height is auto to grow with content
-    <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 relative overflow-hidden transition-all duration-300 ease-in-out">
+    <div className="bg-white rounded-3xl p-5 md:p-6 shadow-sm border border-slate-100 relative overflow-hidden transition-all duration-300 ease-in-out">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-2">
@@ -81,19 +79,19 @@ const SmartFishChecker: React.FC = () => {
           value={species}
           onChange={(e) => setSpecies(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="e.g. Tilapia, Bangus, Hito..."
-          className="w-full bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 border-transparent focus:border-blue-500 text-slate-800 rounded-2xl py-3 pl-12 pr-28 transition-all outline-none"
+          placeholder="e.g. Tilapia, Bangus..."
+          className="w-full bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 border-transparent focus:border-blue-500 text-slate-800 rounded-2xl py-3 pl-12 pr-24 md:pr-28 transition-all outline-none text-sm md:text-base"
         />
         <button 
           onClick={handleCheck}
           disabled={loading}
-          className="absolute right-2 bg-slate-900 hover:bg-slate-800 text-white px-6 py-2 rounded-xl text-sm font-medium transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+          className="absolute right-2 bg-slate-900 hover:bg-slate-800 text-white px-4 md:px-6 py-2 rounded-xl text-xs md:text-sm font-medium transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {loading ? '...' : 'Check'}
         </button>
       </div>
 
-      {/* AI Result Area - Renders in normal flow to push content down */}
+      {/* AI Result Area */}
       {result && (
         <div className={`rounded-2xl p-5 animate-fade-in border ${getStatusColor(result.status).replace('text-', 'border-').split(' ')[2]} ${result.status === 'danger' ? 'bg-red-50' : 'bg-slate-50'}`}>
           <div className="flex items-start gap-3">
@@ -103,16 +101,16 @@ const SmartFishChecker: React.FC = () => {
                 <p className={`font-medium text-lg mb-1 ${result.status === 'danger' ? 'text-red-800' : 'text-slate-800'}`}>
                   {result.message}
                 </p>
-                <div className="flex flex-wrap gap-4 mt-3 text-sm text-slate-500">
-                  <div className="bg-white px-3 py-1 rounded-md border border-slate-200 shadow-sm">
+                <div className="flex flex-wrap gap-2 md:gap-4 mt-3 text-sm text-slate-500">
+                  <div className="bg-white px-3 py-1 rounded-md border border-slate-200 shadow-sm flex-1 md:flex-none text-center md:text-left">
                     <span className="block text-xs text-slate-400 uppercase tracking-wide">Ideal Salinity</span>
                     <span className="font-semibold text-slate-700">{result.idealSalinity}</span>
                   </div>
-                  <div className="bg-white px-3 py-1 rounded-md border border-slate-200 shadow-sm">
+                  <div className="bg-white px-3 py-1 rounded-md border border-slate-200 shadow-sm flex-1 md:flex-none text-center md:text-left">
                     <span className="block text-xs text-slate-400 uppercase tracking-wide">Ideal Temp</span>
                     <span className="font-semibold text-slate-700">{result.idealTemp}</span>
                   </div>
-                  <div className={`px-3 py-1 rounded-md border flex items-center shadow-sm ${getStatusColor(result.status)}`}>
+                  <div className={`px-3 py-1 rounded-md border flex items-center justify-center shadow-sm w-full md:w-auto ${getStatusColor(result.status)}`}>
                     <span className="font-bold">{getStatusLabel(result)}</span>
                   </div>
                 </div>

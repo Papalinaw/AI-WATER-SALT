@@ -1,11 +1,29 @@
 import React from 'react';
-import { Activity, History, Bell, Sparkles } from 'lucide-react';
+import { Activity, History, Bell, Sparkles, X } from 'lucide-react';
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   return (
-    <div className="w-64 h-screen bg-white fixed left-0 top-0 border-r border-gray-100 flex flex-col p-6 z-10">
+    <div className={`
+      w-64 h-screen bg-white fixed left-0 top-0 border-r border-gray-100 flex flex-col p-6 z-40
+      transform transition-transform duration-300 ease-in-out
+      ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
+      md:translate-x-0
+    `}>
+      {/* Mobile Close Button */}
+      <button 
+        onClick={onClose}
+        className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 md:hidden"
+      >
+        <X size={20} />
+      </button>
+
       {/* Logo */}
-      <div className="mb-10 px-2">
+      <div className="mb-10 px-2 mt-2 md:mt-0">
         <img 
           src="images/image.png" 
           alt="Aqualiv" 
