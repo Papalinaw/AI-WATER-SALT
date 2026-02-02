@@ -86,7 +86,7 @@ const App: React.FC = () => {
       {/* Mobile Header */}
       <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-slate-100 sticky top-0 z-30">
         <div className="h-10 w-auto">
-          <img src="/image.png" alt="Aqualiv" className="h-full w-auto object-contain" />
+          <img src="assets/image.png" alt="Aqualiv" className="h-full w-auto object-contain" />
         </div>
         <button 
           onClick={() => setIsSidebarOpen(true)}

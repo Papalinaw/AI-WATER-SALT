@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Activity, History, Bell, Sparkles, X } from 'lucide-react';
 
+
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
@@ -34,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       {/* Logo */}
       <div className="mb-10 px-2 mt-2 lg:mt-0 flex items-center justify-center lg:justify-start">
         <img 
-          src="components/image.png" 
+          src="assets/image.png" 
           alt="Aqualiv" 
           className="h-16 w-auto object-contain"
           onError={(e) => {
