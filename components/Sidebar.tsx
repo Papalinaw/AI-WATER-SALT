@@ -34,7 +34,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       {/* Logo */}
       <div className="mb-10 px-2 mt-2 lg:mt-0 flex items-center justify-center lg:justify-start">
         <img 
-          src="components/logo/image.png" 
+          src="components/image.png" 
           alt="Aqualiv" 
           className="h-16 w-auto object-contain"
           onError={(e) => {
