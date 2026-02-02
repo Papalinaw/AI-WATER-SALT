@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Sparkles, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
+import { Search, Sparkles, CheckCircle, AlertTriangle, XCircle, Loader } from 'lucide-react';
 import { checkFishCompatibility } from '../services/aiService';
 import { FishCompatibilityResult } from '../types';
 
@@ -28,93 +28,60 @@ const SmartFishChecker: React.FC = () => {
     if (e.key === 'Enter') handleCheck();
   };
 
-  const getStatusColor = (status: 'safe' | 'warning' | 'danger') => {
-    switch (status) {
-      case 'safe': return 'text-emerald-500 bg-emerald-50 border-emerald-100';
-      case 'warning': return 'text-amber-500 bg-amber-50 border-amber-100';
-      case 'danger': return 'text-red-500 bg-red-50 border-red-100';
-      default: return 'text-slate-500 bg-slate-50 border-slate-100';
-    }
-  };
-
-  const getStatusIcon = (status: 'safe' | 'warning' | 'danger') => {
-    switch (status) {
-      case 'safe': return <CheckCircle className="text-emerald-500 mt-1 flex-shrink-0" size={20} />;
-      case 'warning': return <AlertTriangle className="text-amber-500 mt-1 flex-shrink-0" size={20} />;
-      case 'danger': return <XCircle className="text-red-500 mt-1 flex-shrink-0" size={20} />;
-      default: return null;
-    }
-  };
-
-  const getStatusLabel = (result: FishCompatibilityResult) => {
-    if (result.status === 'safe') return '✅ Suitable';
-    if (result.status === 'danger') return '⛔ Not Suitable';
-    return '⚠️ Not Ideal';
-  };
-
   return (
-    <div className="bg-white rounded-3xl p-5 md:p-6 shadow-sm border border-slate-100 relative overflow-hidden transition-all duration-300 ease-in-out">
+    <div className="h-full bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-col hover:shadow-md transition-shadow relative overflow-hidden">
+      {/* Background Decoration */}
+      <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+        <Sparkles size={100} className="text-sky-500" />
+      </div>
+      
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-2">
-          <div className="bg-blue-50 p-2 rounded-lg text-blue-500">
-            <Sparkles size={20} />
-          </div>
-          <h3 className="font-bold text-slate-800 text-lg">Smart Fish Checker</h3>
+      <div className="flex items-center gap-2 mb-4">
+        <div className="p-2 bg-sky-100 rounded-lg text-sky-600">
+          <Sparkles size={20} />
         </div>
-        
-        {/* Decorative subtle visual */}
-        <div className="hidden sm:block">
-           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5l0 14"/><path d="M18 13l-6-6"/><path d="M6 13l6-6"/></svg>
-        </div>
+        <h3 className="font-bold text-slate-700">Smart Fish Checker</h3>
       </div>
 
-      {/* Input Area */}
-      <div className="relative flex items-center mb-6">
-        <div className="absolute left-4 text-slate-400">
-          <Search size={20} />
+      {/* Input Group */}
+      <div className="flex gap-2 z-10 mb-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={16} />
+          <input 
+            type="text" 
+            placeholder="e.g. Tilapia, Bangus..." 
+            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500/20 text-sm"
+            value={species}
+            onChange={(e) => setSpecies(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
         </div>
-        <input 
-          type="text" 
-          value={species}
-          onChange={(e) => setSpecies(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="e.g. Tilapia, Bangus..."
-          className="w-full bg-slate-50 hover:bg-slate-100 focus:bg-white border-2 border-transparent focus:border-blue-500 text-slate-800 rounded-2xl py-3 pl-12 pr-24 md:pr-28 transition-all outline-none text-sm md:text-base"
-        />
         <button 
           onClick={handleCheck}
           disabled={loading}
-          className="absolute right-2 bg-slate-900 hover:bg-slate-800 text-white px-4 md:px-6 py-2 rounded-xl text-xs md:text-sm font-medium transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+          className="bg-slate-900 text-white px-4 rounded-xl font-medium text-sm hover:bg-slate-800 transition-colors disabled:opacity-50 min-w-[80px] flex justify-center items-center"
         >
-          {loading ? '...' : 'Check'}
+          {loading ? <Loader className="animate-spin" size={18} /> : 'Check'}
         </button>
       </div>
 
-      {/* AI Result Area */}
+      {/* Result Display */}
       {result && (
-        <div className={`rounded-2xl p-5 animate-fade-in border ${getStatusColor(result.status).replace('text-', 'border-').split(' ')[2]} ${result.status === 'danger' ? 'bg-red-50' : 'bg-slate-50'}`}>
-          <div className="flex items-start gap-3">
-             {getStatusIcon(result.status)}
-             
-             <div className="flex-1">
-                <p className={`font-medium text-lg mb-1 ${result.status === 'danger' ? 'text-red-800' : 'text-slate-800'}`}>
-                  {result.message}
-                </p>
-                <div className="flex flex-wrap gap-2 md:gap-4 mt-3 text-sm text-slate-500">
-                  <div className="bg-white px-3 py-1 rounded-md border border-slate-200 shadow-sm flex-1 md:flex-none text-center md:text-left">
-                    <span className="block text-xs text-slate-400 uppercase tracking-wide">Ideal Salinity</span>
-                    <span className="font-semibold text-slate-700">{result.idealSalinity}</span>
-                  </div>
-                  <div className="bg-white px-3 py-1 rounded-md border border-slate-200 shadow-sm flex-1 md:flex-none text-center md:text-left">
-                    <span className="block text-xs text-slate-400 uppercase tracking-wide">Ideal Temp</span>
-                    <span className="font-semibold text-slate-700">{result.idealTemp}</span>
-                  </div>
-                  <div className={`px-3 py-1 rounded-md border flex items-center justify-center shadow-sm w-full md:w-auto ${getStatusColor(result.status)}`}>
-                    <span className="font-bold">{getStatusLabel(result)}</span>
-                  </div>
-                </div>
-             </div>
+        <div className={`mt-auto p-3 rounded-xl flex items-start gap-3 animate-fade-in border ${
+          result.status === 'safe' ? 'bg-emerald-50 border-emerald-100 text-emerald-900' : 
+          result.status === 'danger' ? 'bg-red-50 border-red-100 text-red-900' : 
+          'bg-amber-50 border-amber-100 text-amber-900'
+        }`}>
+          <div className="shrink-0 mt-0.5">
+            {result.status === 'safe' && <CheckCircle className="text-emerald-500" size={20} />}
+            {result.status === 'danger' && <XCircle className="text-red-500" size={20} />}
+            {result.status === 'warning' && <AlertTriangle className="text-amber-500" size={20} />}
+          </div>
+          <div>
+            <p className="font-bold text-sm">
+              {result.status === 'safe' ? 'Compatible!' : result.status === 'danger' ? 'Not Recommended' : 'Use Caution'}
+            </p>
+            <p className="text-xs opacity-80 mt-1 leading-relaxed">{result.message}</p>
           </div>
         </div>
       )}
